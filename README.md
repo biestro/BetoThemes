@@ -1,6 +1,9 @@
 # BetoThemes
 I like mathematica, sue me.
 
+![img](flux.png)
+![img](lines.png)
+
 # Installation
 ```julia
 using Pkg

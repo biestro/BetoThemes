@@ -158,8 +158,8 @@ function style_beto(; bw = 1.25, lw = 1.25, ms = 10, sw = 1.0)
     ),
     Legend = Attributes(
       backgroundcolor = :white,
-      # framecolor=:transparent,
-      framevisible = false,
+      framecolor=:transparent,
+      framevisible = true, # otherwise conflicts with grids
       rowgap = 0,
       titlegap = 0,
     ),
@@ -173,6 +173,10 @@ function style_beto(; bw = 1.25, lw = 1.25, ms = 10, sw = 1.0)
     ScatterLines= Attributes(
       linewidth=linewidth,
       markersize=markersize,
+    ),
+    StreamPlot= Attributes(
+      linewidth=linewidth,
+      markersize=0.0,
     ),
   )
 end
