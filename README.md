@@ -1,2 +1,2 @@
 # BetoThemes
-I like mathematica, sue me
+I like mathematica, sue me.
