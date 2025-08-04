@@ -89,7 +89,8 @@ function create_fig(; _dpi = 100, _size = (3.375, 2.5), _fontsize = 11, _theme =
 
     # Always enforce transparent figure background
     default_fig_kwargs = Dict(
-        :backgroundcolor => :transparent,
+        # :backgroundcolor => :transparent,
+        :backgroundcolor => :white,
     )
 
     # Separate kwargs for Figure vs Theme
