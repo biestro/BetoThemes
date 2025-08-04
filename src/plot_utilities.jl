@@ -1,5 +1,4 @@
 
-
 theme = Theme(
   Axis = (
     # xgridvisible=true, 
@@ -104,20 +103,26 @@ const ColorTheme = Dict{Symbol, Dict{Symbol, Any}}()
 beto_colors() = collect(keys(ColorTheme))
 
 
-function style_beto(; bw = 1.25, lw = 1.25, ms = 10, sw = 1.0)
+function style_beto(; dpi = 100, bw = 0.5, lw = 1.25, ms = 10, sw = 1.0)
 
-  spinewidth = bw# basewidth * 0.75
-  basewidth = bw
-  markersize = ms
-  linewidth = lw
-  # linewidth = bw,
-  strokewidth = sw
+  # Convert all pt units to px using DPI
+  pt_to_px(x) = x / 72 * dpi
+
+  spinewidth = pt_to_px(bw)
+  basewidth  = pt_to_px(bw)
+  linewidth  = pt_to_px(lw)
+  markersize = pt_to_px(ms)
+  strokewidth = pt_to_px(sw)
+  ticksize = pt_to_px(7.0)  # fixed tick size in pt
+  cbwidth = pt_to_px(6)
+
   return Attributes(
 
-    fonts = (; regular = "TeX Gyre Heros Makie",
-    bold = "TeX Gyre Heros Makie Bold", 
-    italic = "TeX Gyre Heros Makie Italic",
-    bold_italic = "TeX Gyre Heros Makie Bold Italic",
+    fonts = (; 
+      regular = "TeX Gyre Heros Makie",
+      bold = "TeX Gyre Heros Makie Bold", 
+      italic = "TeX Gyre Heros Makie Italic",
+      bold_italic = "TeX Gyre Heros Makie Bold Italic",
     ),
 
     Axis = Attributes(
@@ -126,18 +131,40 @@ function style_beto(; bw = 1.25, lw = 1.25, ms = 10, sw = 1.0)
       topspinevisible = true,
       leftspinevisible = true,
       rightspinevisible = true,
-      xgridvisible=false,
-      ygridvisible=false,
+      xgridvisible = false,
+      ygridvisible = false,
       xgridwidth = basewidth,
       ygridwidth = basewidth,
-      xgridstyle = (:dash,:dense),
-      ygridstyle = (:dash,:dense),
-      xticksize = 5.0,
-      yticksize = 5.0,
-      xtickwidth= basewidth,
-      ytickwidth= basewidth,
+      xgridstyle = (:dash, :dense),
+      ygridstyle = (:dash, :dense),
+      xticksize = ticksize,
+      yticksize = ticksize,
+      xtickwidth = basewidth,
+      ytickwidth = basewidth,
+      xminortickwidth = basewidth,
+      yminortickwidth = basewidth,
+      xminorticksize = ticksize/3*2,
+      yminorticksize = ticksize/3*2,
+      backgroundcolor = :transparent,
+      # xticksmirrored=true,
+      xticksmirrored=true,
+      yticksmirrored=true,
+      ytickalign=1,
+      xtickalign=1,
+      xminorticksvisible = true,
+      yminorticksvisible = true,
+      xminortickalign = 1,
+      yminortickalign = 1,
+      xminorticks = IntervalsBetween(2),
+      yminorticks = IntervalsBetween(2),
     ),
-    Colorbar = Attributes(labelrotation = 0),
+
+    Colorbar = Attributes(
+      labelrotation = 0, 
+      tickalign=0.5,
+      width=cbwidth,
+      ticksize = cbwidth,
+      ),
 
     Axis3 = Attributes(
       xspinewidth = spinewidth,
@@ -149,42 +176,43 @@ function style_beto(; bw = 1.25, lw = 1.25, ms = 10, sw = 1.0)
       xgridstyle = :solid,
       ygridstyle = :solid,
       zgridstyle = :solid,
-      xlabeloffset = 30,
-      ylabeloffset = 30,
-      zlabeloffset = 30,
-      xtickwidth=basewidth,
-      ytickwidth=basewidth,
-      ztickwidth=basewidth,
+      xlabeloffset = pt_to_px(30),
+      ylabeloffset = pt_to_px(30),
+      zlabeloffset = pt_to_px(30),
+      xtickwidth = basewidth,
+      ytickwidth = basewidth,
+      ztickwidth = basewidth,
     ),
+
     Legend = Attributes(
       backgroundcolor = :white,
-      framecolor=:transparent,
-      framevisible = true, # otherwise conflicts with grids
+      framecolor = :transparent,
+      framevisible = true,
       rowgap = 0,
       titlegap = 0,
     ),
+
     Scatter = Attributes(
       markersize = markersize,
       strokewidth = strokewidth,
     ),
-    Lines= Attributes(
-      linewidth=linewidth,
+
+    Lines = Attributes(
+      linewidth = linewidth,
     ),
-    ScatterLines= Attributes(
-      linewidth=linewidth,
-      markersize=markersize,
+
+    ScatterLines = Attributes(
+      linewidth = linewidth,
+      markersize = markersize,
     ),
-    StreamPlot= Attributes(
-      linewidth=linewidth,
-      markersize=0.0,
+
+    StreamPlot = Attributes(
+      linewidth = linewidth,
+      markersize = 0.0,
     ),
   )
 end
 
-# style_beto(basewidth) = style_beto(basewidth, basewidth, 10, 1.0)
-# style_beto(basewidth, linewidth) = style_beto(basewidth, linewidth, 10, 1.0)
-# style_beto(basewidth, linewidth, msize) = style_beto(basewidth, linewidth, msize, 1.0)
-# style_beto(basewidth) = style_beto(basewidth, basewidth)
 
 function color_beto(theme::Symbol)
     ct = ColorTheme[theme]
@@ -433,10 +461,11 @@ ColorTheme[:sea] = Dict(
 _BlueGreenYellow = ["#1f0266", "#193079", "#175a85", "#197f8c", "#269988", "#3ab082", "#54c279", "#7dd06e", "#afdb63", "#e9e559"]
 _LakeColors = ["#4b0f87", "#6237a7", "#795fc8", "#9087e8", "#a1a2e8", "#b2bde9", "#c2d8e9", "#d2dde2", "#e1e2db", "#f0e7d5"]
 _DefaultColors=["#e95536", "#5e81b5", "#e19c24", "#8fb032", "#eb6235", "#8778b3", "#c56e1a", "#5d9ec7", "#ffbf00", "#a5609d", "#929600"]
+
 ColorTheme[:math] = Dict(
   :background => "#ffffff",
   :text       => ["#000000", "#111111"],
-  :line       => [:gray60, :gray60],
+  :line       => [:black, :black],
   # :line       => ["#000000", "#362C21"],
   :gridline   => :gray80,#"#eee4da",
   :swatch     => _DefaultColors,#["#111111", "#65ADC2", "#233B43", "#E84646", "#C29365", "#362C21", "#316675", "#168E7F", "#109B37"],
