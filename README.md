@@ -9,7 +9,7 @@ I like mathematica, sue me.
 using Pkg
 Pkg.add(url="https://github.com/biestro/BetoThemes.git")
 Pkg.update("BetoThemes")
-using MyMakieThemes
+using BetoThemes
 ```
 
 # Dependencies
